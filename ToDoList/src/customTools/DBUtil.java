@@ -1,5 +1,8 @@
 package customTools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -55,4 +58,16 @@ public class DBUtil {
 			em.close();
 		}
 	}	
+	
+	 public static Date ConvertDate(String textDate){
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			Date duedate = null;
+			try {
+				duedate = formatter.parse(textDate);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return duedate;
+		}
 }

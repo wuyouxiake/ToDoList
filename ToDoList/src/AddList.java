@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import customTools.DBUtil;
 import model.Todolist;
 import model.Todouser;;
 
@@ -29,6 +30,7 @@ public class AddList extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+   
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -38,14 +40,7 @@ public class AddList extends HttpServlet {
 		String description = request.getParameter("description");
 		String priority = request.getParameter("priority");
 		String tempDueDate = request.getParameter("duedate");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date duedate = null;
-		try {
-			duedate = formatter.parse(tempDueDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Date duedate = DBUtil.ConvertDate(tempDueDate);
 		
 		Todouser tempUser = (Todouser) session.getAttribute("user");
 		Todolist thisList = new Todolist();
@@ -63,7 +58,12 @@ public class AddList extends HttpServlet {
 		
 		getServletContext().getRequestDispatcher("/successful.jsp")
 		.forward(request, response);
-		}
+		
+		
+	
+	
+	
+	}
 	
 
 	/**
@@ -73,5 +73,7 @@ public class AddList extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+	
 
 }
