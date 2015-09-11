@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,20 +40,35 @@ public class SignUp extends HttpServlet {
 		String photolink = request.getParameter("photolink");
 		Todouser tempUser=new Todouser();
 		
-		tempUser.setUsername(user_name);
-		tempUser.setPassword(password);
-		tempUser.setEmail(email);
-		tempUser.setPhotolink(photolink);
+		Pattern r = Pattern.compile("\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z]{2,4}\\b");
+
+	    // Now create matcher object.
+	    Matcher m = r.matcher(email);
+	    System.out.println(m.matches());
+	    if(!m.matches()){
+	    	String alert = "Email not valid!";
+	    	request.setAttribute("alert", alert);
+			
+			getServletContext().getRequestDispatcher("/successful.jsp")
+			.forward(request, response);
+	    	
+	    }else{
+	    	tempUser.setUsername(user_name);
+			tempUser.setPassword(password);
+			tempUser.setEmail(email);
+			tempUser.setPhotolink(photolink);
+			
+			ToDoUserDB.insert(tempUser);
+			
+			String alert="User created!";
+			request.setAttribute("alert", alert);
+			
+			getServletContext().getRequestDispatcher("/successful.jsp")
+			.forward(request, response);
+			}
 		
-		ToDoUserDB.insert(tempUser);
+	    }
 		
-		String alert="User created!";
-		request.setAttribute("alert", alert);
-		
-		getServletContext().getRequestDispatcher("/successful.jsp")
-		.forward(request, response);
-		}
-	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
